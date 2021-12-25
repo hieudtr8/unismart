@@ -6,20 +6,27 @@
             <div class="card-header font-weight-bold">
                 Chỉnh sửa thông tin người dùng
             </div>
+            @if (session('status'))
+                <div class="alert alert-success">
+                    {{ session('status') }}
+                </div>
+            @endif
             <div class="card-body">
-                <form action="{{ url('admin/user/store') }}" method="POST">
+                <form action="{{ url('admin/user/update') }}" method="POST">
                     @csrf
                     <div class="form-group">
                         <label for="name">Họ và tên</label>
-                        <input class="form-control" type="text" name="name" id="name">
+                        <input type="hidden" name="id" value="{{ $user->id }}">
+                        <input class="form-control" type="text" name="name" id="name" value="{{ $user->name }}">
                         @error('name')
                             <small class="form-text text-danger">{{ $message }}</small>
                         @enderror
                     </div>
                     <div class="form-group">
                         <label for="email">Email</label>
-                        <input class="form-control" type="text" name="email" id="email" @if (Auth::id() == $user->id)
-                        disabled
+                        <input class="form-control" type="text" name="email" id="email" value="{{ $user->email }}"
+                            @if (Auth::id() == $user->id)
+                        readonly
                         @endif >
                         @error('email')
                             <small class="form-text text-danger">{{ $message }}</small>

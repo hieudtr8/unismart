@@ -116,6 +116,40 @@ class AdminUserController extends Controller
     {
         $user = User::find($id);
         $roles = Role::all();
-        return view('admin.user.edit',compact('user','roles'));
+        return view('admin.user.edit', compact('user', 'roles'));
+    }
+    function update(Request $request)
+    {
+        $request->validate(
+            [
+                'name' => 'string|max:255',
+                'email' => 'email|string|max:255',
+                'password' => 'min:6|confirmed|string',
+                'password_confirmation' => 'required',
+                'role' => 'gt:0'
+            ],
+            [
+                'required' => ":attribute không được để trống",
+                'min' => ":attribute phải ít nhất 6 ký tự",
+                'confirmed' => ":attribute và mật khẩu xác nhận cần phải trùng khớp",
+                'unique' => 'Email đã được đăng ký',
+                'gt' => 'Vui lòng chọn quyền'
+            ],
+            [
+                'name' => "Họ và tên",
+                'email' => "Email",
+                'password' => "Mật khẩu",
+                'password_confirmation' => "Mật khẩu xác nhận",
+            ],
+        );
+        User::where('id', $request->id)
+            ->update([
+                'name' => $request->input('name'),
+                'email' => $request->input('email'),
+                'role' => $request->input('role'),
+                'password' => Hash::make($request->input('password'))
+            ]);
+        $url = "/admin/user/edit/" . $request->id;
+        return redirect($url)->with('status', "Chỉnh sửa thông tin thành viên thành công!");
     }
 }

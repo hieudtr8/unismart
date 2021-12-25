@@ -30,4 +30,5 @@ Route::middleware('auth')->group(function () {
     Route::get('admin/user/forceDelete/{id?}', 'AdminUserController@forceDelete')->name('forceDelete.user');
     Route::post('admin/user/action', 'AdminUserController@action');
     Route::get('admin/user/edit/{id?}', 'AdminUserController@edit')->name('edit.user');
+    Route::post('admin/user/update', 'AdminUserController@update');
 });
