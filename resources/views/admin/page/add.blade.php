@@ -6,16 +6,16 @@
     <div id="content" class="container-fluid">
         <div class="card">
             <div class="card-header font-weight-bold">
-                Thêm bài viết
+                Thêm trang
             </div>
             <div class="card-body">
                 <form>
                     <div class="form-group">
-                        <label for="name">Tiêu đề bài viết</label>
+                        <label for="name">Tiêu đề trang</label>
                         <input class="form-control" type="text" name="name" id="name">
                     </div>
                     <div class="form-group">
-                        <label for="content">Nội dung bài viết</label>
+                        <label for="content">Nội dung trang</label>
                         <textarea name="" class="form-control" id="content" cols="30" rows="5"></textarea>
                     </div>
 

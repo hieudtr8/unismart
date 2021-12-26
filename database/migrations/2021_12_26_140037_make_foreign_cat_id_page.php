@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddSoftdeleteToUserTable extends Migration
+class MakeForeignCatIdPage extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,10 @@ class AddSoftdeleteToUserTable extends Migration
      */
     public function up()
     {
-        Schema::table('users', function (Blueprint $table) {
+        Schema::table('pages', function (Blueprint $table) {
             //
-            $table->softDeletes();
+            $table->unsignedBigInteger('cat_id');
+            $table->foreign('cat_id')->references('id')->on('cat_page');
         });
     }
 
@@ -26,8 +27,8 @@ class AddSoftdeleteToUserTable extends Migration
      */
     public function down()
     {
-        Schema::table('users', function (Blueprint $table) {
-            Schema::dropIfExists('users.deleted_at');
+        Schema::table('pages', function (Blueprint $table) {
+            //
         });
     }
 }

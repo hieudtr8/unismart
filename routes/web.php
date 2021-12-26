@@ -19,7 +19,9 @@ Route::get('/', function () {
 });
 
 Auth::routes();
-
+Route::group(['prefix' => 'laravel-filemanager'], function () {
+    \UniSharp\LaravelFilemanager\Lfm::routes();
+});
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', 'DashboardController@show');
     Route::get('admin', 'DashboardController@show');
