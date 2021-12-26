@@ -4,18 +4,18 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
-class DashboardController extends Controller
+class OrderController extends Controller
 {
-    //
     function __construct()
     {
         $this->middleware(function ($request, $next) {
-            session(['module_active' => 'dashboard']);
+            session(['module_active' => 'order']);
 
             return $next($request);
         });
     }
-    function show(){
-        return view('admin.dashboard');
+    function list()
+    {
+        return view('admin.order.list');
     }
 }

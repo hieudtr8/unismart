@@ -11,6 +11,14 @@ use Illuminate\Support\Facades\Hash;
 class AdminUserController extends Controller
 {
     //
+    function __construct()
+    {
+        $this->middleware(function ($request, $next) {
+            session(['module_active' => 'user']);
+
+            return $next($request);
+        });
+    }
     function list(Request $request)
     {
         $status =  $request->input('status');

@@ -52,7 +52,10 @@
         <div id="page-body" class="d-flex">
             <div id="sidebar" class="bg-white">
                 <ul id="sidebar-menu">
-                    <li class="nav-link">
+                    @php
+                        $module_active = session('module_active');
+                    @endphp
+                    <li class="nav-link @if ($module_active == 'dashboard') active @endif">
                         <a href="{{ url('dashboard') }}">
                             <div class="nav-link-icon d-inline-flex">
                                 <i class="far fa-folder"></i>
@@ -61,8 +64,8 @@
                         </a>
                         <i class="arrow fas fa-angle-right"></i>
                     </li>
-                    <li class="nav-link">
-                        <a href="{{ url('admin/page/list') }}">
+                    <li class="nav-link @if ($module_active == 'page') active @endif">
+                        <a href="{{ url('admin/page') }}">
                             <div class="nav-link-icon d-inline-flex">
                                 <i class="far fa-folder"></i>
                             </div>
@@ -72,10 +75,10 @@
 
                         <ul class="sub-menu">
                             <li><a href="{{ url('admin/page/add') }}">Thêm mới</a></li>
-                            <li><a href="{{ url('admin/page/lsit') }}">Danh sách</a></li>
+                            <li><a href="{{ url('admin/page/list') }}">Danh sách</a></li>
                         </ul>
                     </li>
-                    <li class="nav-link">
+                    <li class="nav-link @if ($module_active == 'post') active @endif">
                         <a href="{{ url('admin/post/list') }}">
                             <div class="nav-link-icon d-inline-flex">
                                 <i class="far fa-folder"></i>
@@ -89,7 +92,7 @@
                             <li><a href="{{ url('admin/post/cat/list') }}">Danh mục</a></li>
                         </ul>
                     </li>
-                    <li class="nav-link active">
+                    <li class="nav-link @if ($module_active == 'product') active @endif">
                         <a href="{{ url('admin/product/list') }}">
                             <div class="nav-link-icon d-inline-flex">
                                 <i class="far fa-folder"></i>
@@ -103,8 +106,8 @@
                             <li><a href="{{ url('admin/product/cat/list') }}">Danh mục</a></li>
                         </ul>
                     </li>
-                    <li class="nav-link">
-                        <a href="{{ url('admin/order/list') }}">
+                    <li class="nav-link @if ($module_active == 'order') active @endif">
+                        <a href="{{ url('admin/order') }}">
                             <div class="nav-link-icon d-inline-flex">
                                 <i class="far fa-folder"></i>
                             </div>
@@ -115,7 +118,7 @@
                             <li><a href="{{ url('admin/order/list') }}">Đơn hàng</a></li>
                         </ul>
                     </li>
-                    <li class="nav-link">
+                    <li class="nav-link @if ($module_active == 'user') active @endif ">
                         <a href="{{ url('admin/user/list') }}">
                             <div class="nav-link-icon d-inline-flex">
                                 <i class="far fa-folder"></i>
