@@ -47,9 +47,18 @@ Route::middleware('auth')->group(function () {
     Route::get('admin/post/list', 'PostController@list');
     Route::get('admin/post/add', 'PostController@add');
     Route::get('admin/post/cat', 'PostController@cat_list');
+    // -- Posts cat
     Route::get('admin/post/cat/list', 'PostController@cat_list');
     // Pages
     Route::get('admin/page', 'PageController@list');
     Route::get('admin/page/list', 'PageController@list');
     Route::get('admin/page/add', 'PageController@add');
+    Route::post('admin/page/store', 'PageController@store');
+    Route::get('admin/page/delete/{id?}', 'PageController@delete')->name('delete.page');
+    Route::get('admin/page/forceDelete/{id?}', 'PageController@forceDelete')->name('forceDelete.page');
+    Route::post('admin/page/action', 'PageController@action');
+    Route::get('admin/page/edit/{id?}', 'PageController@edit')->name('edit.page');
+    Route::post('admin/page/update', 'PageController@update');
+    // -- Pages cat
+
 });

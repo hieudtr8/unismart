@@ -13,7 +13,7 @@ class CreateCatPageTable extends Migration
      */
     public function up()
     {
-        Schema::create('cat_page', function (Blueprint $table) {
+        Schema::create('cat_pages', function (Blueprint $table) {
             $table->id();
             $table->string('name');
             $table->timestamps();
@@ -27,6 +27,5 @@ class CreateCatPageTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('cat_page');
     }
 }

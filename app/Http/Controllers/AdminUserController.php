@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\User;
 use App\Role;
+use App\RoleUser;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -74,6 +75,13 @@ class AdminUserController extends Controller
             'email' =>  $request->input('email'),
             'role' => $request->input('role'),
             'password' => Hash::make($request->input('password')),
+        ]);
+        $user = User::where('email', 'LIKE', "%{$request->input('email')}%")->first();
+        $user_id = $user->id;
+        $role_id = $user->role;
+        RoleUser::create([
+            'user_id' => $user_id,
+            'role_id' => $role_id,
         ]);
         return redirect('/admin/user/list')->with('status', "Thêm thành viên thành công!");
     }
