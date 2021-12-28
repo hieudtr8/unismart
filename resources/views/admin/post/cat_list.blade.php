@@ -3,92 +3,79 @@
     Trang danh sách danh mục bài viết
 @endsection
 @section('content')
-<div id="content" class="container-fluid">
-    <div class="row">
-        <div class="col-4">
-            <div class="card">
-                <div class="card-header font-weight-bold">
-                    Thêm danh mục
+    <div id="content" class="container-fluid">
+        <div class="row">
+            <div class="col-4">
+                <div class="card">
+                    <div class="card-header font-weight-bold">
+                        Thêm danh mục
+                    </div>
+                    <div class="card-body">
+                        @if (session('status'))
+                            <div class="alert alert-success">
+                                {{ session('status') }}
+                            </div>
+                        @endif
+                        @if (session('error'))
+                            <div class="alert alert-danger">
+                                {{ session('error') }}
+                            </div>
+                        @endif
+                        <form action="{{ url('admin/post/cat/list/store') }}" method="POST">
+                            @csrf
+                            <div class="form-group">
+                                <label for="title">Tên danh mục</label>
+                                <input class="form-control" type="text" name="title" id="name">
+                            </div>
+                            <button type="submit" class="btn btn-primary">Thêm mới</button>
+                        </form>
+                    </div>
                 </div>
-                <div class="card-body">
-                    <form>
-                        <div class="form-group">
-                            <label for="name">Tên danh mục</label>
-                            <input class="form-control" type="text" name="name" id="name">
-                        </div>
-                        <div class="form-group">
-                            <label for="">Danh mục cha</label>
-                            <select class="form-control" id="">
-                                <option>Chọn danh mục</option>
-                                <option>Danh mục 1</option>
-                                <option>Danh mục 2</option>
-                                <option>Danh mục 3</option>
-                                <option>Danh mục 4</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="">Trạng thái</label>
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios1" value="option1" checked>
-                                <label class="form-check-label" for="exampleRadios1">
-                                    Chờ duyệt
-                                </label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios2" value="option2">
-                                <label class="form-check-label" for="exampleRadios2">
-                                    Công khai
-                                </label>
-                            </div>
-                        </div>
+            </div>
+            <div class="col-8">
+                <div class="card">
+                    <div class="card-header font-weight-bold">
+                        Danh mục
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">ID danh mục</th>
+                                    <th scope="col">Tên danh mục</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @php
+                                    $stt = 0;
+                                @endphp
+                                @if (count($cats) > 0)
+                                    @foreach ($cats as $cat)
+                                        @php
+                                            $stt++;
+                                        @endphp
+                                        <tr>
+                                            <th scope="row">{{ $stt }}</th>
+                                            <td>{{ $cat->id }}</td>
+                                            <td>{{ $cat->title }}</td>
+                                            <td> <a href=" {{ route('delete.cat.post', $cat->id) }}"
+                                                    onclick="return confirm('Bạn có chắc chắn xóa bản ghi này?')"
+                                                    class="btn btn-danger btn-sm rounded-0" type="button"
+                                                    data-toggle="tooltip" data-placement="top" title="Delete"><i
+                                                        class="fa fa-trash"></i></a> </td>
+                                        </tr>
+                                    @endforeach
+                                @else
+                                    <td class="bg-white">Không có bản ghi nào</td>
+                                @endif
 
-
-
-                        <button type="submit" class="btn btn-primary">Thêm mới</button>
-                    </form>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="col-8">
-            <div class="card">
-                <div class="card-header font-weight-bold">
-                    Danh mục
-                </div>
-                <div class="card-body">
-                    <table class="table table-striped">
-                        <thead>
-                            <tr>
-                                <th scope="col">#</th>
-                                <th scope="col">First</th>
-                                <th scope="col">Last</th>
-                                <th scope="col">Handle</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <th scope="row">1</th>
-                                <td>Mark</td>
-                                <td>Otto</td>
-                                <td>@mdo</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">2</th>
-                                <td>Jacob</td>
-                                <td>Thornton</td>
-                                <td>@fat</td>
-                            </tr>
-                            <tr>
-                                <th scope="row">3</th>
-                                <td>Larry</td>
-                                <td>the Bird</td>
-                                <td>@twitter</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
+
     </div>
-
-</div>
 @endsection

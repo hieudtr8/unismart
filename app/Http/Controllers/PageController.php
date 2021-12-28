@@ -79,7 +79,7 @@ class PageController extends Controller
     function forceDelete($id)
     {
         Page::withTrashed()->where('id', $id)->forceDelete();
-        return redirect('admin/user/list')->with('status', "Xóa hoàn toàn thành viên thành công!");
+        return redirect('admin/user/list')->with('status', "Xóa hoàn toàn trang thành công!");
     }
     function action(Request $request)
     {
