@@ -41,7 +41,17 @@ Route::middleware('auth')->group(function () {
     Route::get('admin/product', 'ProductController@list');
     Route::get('admin/product/list', 'ProductController@list');
     Route::get('admin/product/add', 'ProductController@add');
+    Route::post('admin/product/store', 'ProductController@store');
+    Route::get('admin/product/cat', 'ProductController@cat_list');
+    Route::get('admin/product/delete/{id?}', 'ProductController@delete')->name('delete.product');
+    Route::get('admin/product/forceDelete/{id?}', 'ProductController@forceDelete')->name('forceDelete.product');
+    Route::post('admin/product/action', 'ProductController@action');
+    Route::get('admin/product/edit/{id?}', 'ProductController@edit')->name('edit.product');
+    Route::post('admin/product/update', 'ProductController@update');
+    // -- Products cat
     Route::get('admin/product/cat/list', 'ProductController@cat_list');
+    Route::post('admin/product/cat/list/store', 'ProductController@store_cat_list');
+    Route::get('admin/product/cat/list/delete/{id?}', 'ProductController@delete_cat_list')->name('delete.cat.product');
     // Posts
     Route::get('admin/post', 'PostController@list');
     Route::get('admin/post/list', 'PostController@list');

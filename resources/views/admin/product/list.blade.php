@@ -3,134 +3,124 @@
     Trang sản phẩm
 @endsection
 @section('content')
-<div id="content" class="container-fluid">
-    <div class="card">
-        <div class="card-header font-weight-bold d-flex justify-content-between align-items-center">
-            <h5 class="m-0 ">Danh sách sản phẩm</h5>
-            <div class="form-search form-inline">
-                <form action="#">
-                    <input type="" class="form-control form-search" placeholder="Tìm kiếm">
-                    <input type="submit" name="btn-search" value="Tìm kiếm" class="btn btn-primary">
+    <div id="content" class="container-fluid">
+        <div class="card">
+            <div class="card-header font-weight-bold d-flex justify-content-between align-items-center">
+                <h5 class="m-0 ">Danh sách sản phẩm</h5>
+                <div class="form-search form-inline">
+                    <form action="#">
+                        <input type="" class="form-control form-search" name="keyword" value="{{ request()->input('keyword') }}" placeholder="Tìm kiếm">
+                        <input type="submit" name="btn-search" value="Tìm kiếm" class="btn btn-primary">
+                    </form>
+                </div>
+            </div>
+            <div class="card-body">
+                @if (session('status'))
+                    <div class="alert alert-success">
+                        {{ session('status') }}
+                    </div>
+                @endif
+                @if (session('error'))
+                    <div class="alert alert-danger">
+                        {{ session('error') }}
+                    </div>
+                @endif
+                <div class="analytic">
+                    <a href="{{ request()->fullUrlWithQuery(['status' => 'active']) }}" class="text-primary">Đang hoạt
+                        động<span class="text-muted">({{ $count_active }})</span></a>
+                    <a href="{{ request()->fullUrlWithQuery(['status' => 'inactive']) }}" class="text-primary">Vô hiệu
+                        hóa<span class="text-muted">({{ $count_inactive }})</span></a>
+                </div>
+                <form action="{{ url('/admin/product/action') }}" method="POST">
+                    @csrf
+                    <div class="form-action form-inline py-3">
+                        <select class="form-control mr-1" name="action" id="">
+                            <option>Chọn</option>
+                            @if ($status == 'inactive')
+                                <option value="force_delete">Xóa vĩnh viễn</option>
+                                <option value="restore">Khôi phục</option>
+                            @else
+                                <option value="delete">Xóa tạm thời</option>
+                                <option value="active">Công khai</option>
+                                <option value="inactive">Chờ duyệt</option>
+                            @endif
+                        </select>
+                        <input type="submit" name="btn-search" value="Áp dụng" class="btn btn-primary">
+                    </div>
+                    <table class="table table-striped table-checkall">
+                        <thead>
+                            <tr>
+                                <th scope="col">
+                                    <input name="checkall" type="checkbox">
+                                </th>
+                                <th scope="col">#</th>
+                                <th scope="col">Ảnh</th>
+                                <th scope="col">Tên sản phẩm</th>
+                                <th scope="col">Giá</th>
+                                <th scope="col">Danh mục</th>
+                                <th scope="col">Ngày tạo</th>
+                                <th scope="col">Trạng thái</th>
+                                <th scope="col">Tác vụ</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if ($products->total() > 0)
+                                @php
+                                    $stt = 0;
+                                @endphp
+                                @foreach ($products as $product)
+                                    @php
+                                        $stt++;
+                                    @endphp
+                                    <tr class="">
+                                        <td> <input type="checkbox" name="listCheck[]" value="{{ $product->id }}"> </td>
+                                        <td> {{ $stt }}</td>
+                                        <td><img src=" {!! URL::to($product->thumbnail) !!}" alt="">
+                                        </td>
+                                        <td><a href="#">{{ $product->title }}</a></td>
+                                        <td>{{ number_format($product->price, 0, ',', '.') }}đ</td>
+                                        <td>@php
+                                            $cat_name = $cat->where('id', $product->cat_id);
+                                            $cat_name = json_decode($cat_name, true);
+                                            echo $cat_name[$product->cat_id - 1]['title'];
+                                        @endphp</td>
+                                        <td>{{ $product->created_at }}</td>
+                                        <td>
+                                            @php
+                                                if ($product->status == 'active') {
+                                                    echo "<span class='badge badge-success'> Công khai </span>";
+                                                }
+                                                if ($product->status == 'inactive') {
+                                                    echo "<span class='badge badge-danger'> Chờ duyệt </span>";
+                                                }
+                                            @endphp
+                                        </td>
+                                        <td>
+                                            <a href="{{ route('edit.product', $product->id) }}"
+                                                class="btn btn-success btn-sm rounded-0 text-white" type="button"
+                                                data-toggle="tooltip" data-placement="top" title="Edit"><i
+                                                    class="fa fa-edit"></i></a>
+                                            <a href=@if ($status == 'inactive')
+                                                " {{ route('forceDelete.product', $product->id) }}"
+                                            @else
+                                                " {{ route('delete.product', $product->id) }}"
+                                @endif
+                                onclick="return confirm('Bạn có chắc chắn xóa bản ghi này?')"
+                                class="btn btn-danger btn-sm rounded-0 text-white" type="button"
+                                data-toggle="tooltip" data-placement="top" title="Delete"><i class="fa fa-trash"></i></a>
+                                </td>
+                                </tr>
+                            @endforeach
+                        @else
+                            <tr>
+                                <td colspan="7" class="bg-white" style="">Không tìm thấy bản ghi</td>
+                            </tr>
+                            @endif
+                        </tbody>
+                    </table>
                 </form>
+                {{ $products->links() }}
             </div>
-        </div>
-        <div class="card-body">
-            <div class="analytic">
-                <a href="" class="text-primary">Trạng thái 1<span class="text-muted">(10)</span></a>
-                <a href="" class="text-primary">Trạng thái 2<span class="text-muted">(5)</span></a>
-                <a href="" class="text-primary">Trạng thái 3<span class="text-muted">(20)</span></a>
-            </div>
-            <div class="form-action form-inline py-3">
-                <select class="form-control mr-1" id="">
-                    <option>Chọn</option>
-                    <option>Tác vụ 1</option>
-                    <option>Tác vụ 2</option>
-                </select>
-                <input type="submit" name="btn-search" value="Áp dụng" class="btn btn-primary">
-            </div>
-            <table class="table table-striped table-checkall">
-                <thead>
-                    <tr>
-                        <th scope="col">
-                            <input name="checkall" type="checkbox">
-                        </th>
-                        <th scope="col">#</th>
-                        <th scope="col">Ảnh</th>
-                        <th scope="col">Tên sản phẩm</th>
-                        <th scope="col">Giá</th>
-                        <th scope="col">Danh mục</th>
-                        <th scope="col">Ngày tạo</th>
-                        <th scope="col">Trạng thái</th>
-                        <th scope="col">Tác vụ</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr class="">
-                        <td>
-                            <input type="checkbox">
-                        </td>
-                        <td>1</td>
-                        <td><img src="http://via.placeholder.com/80X80" alt=""></td>
-                        <td><a href="#">Samsung Galaxy A51 (8GB/128GB)</a></td>
-                        <td>7.790.000₫</td>
-                        <td>Điện thoại</td>
-                        <td>26:06:2020 14:00</td>
-                        <td><span class="badge badge-success">Còn hàng</span></td>
-                        <td>
-                            <a href="#" class="btn btn-success btn-sm rounded-0 text-white" type="button" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-edit"></i></a>
-                            <a href="#" class="btn btn-danger btn-sm rounded-0 text-white" type="button" data-toggle="tooltip" data-placement="top" title="Delete"><i class="fa fa-trash"></i></a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <input type="checkbox">
-                        </td>
-                        <td>2</td>
-                        <td><img src="http://via.placeholder.com/80X80" alt=""></td>
-                        <td><a href="#">Điện thoại iPhone 11 Pro Max 64GB</a></td>
-                        <td>29.490.000₫</td>
-                        <td>Điện thoại</td>
-                        <td>26:06:2020 14:00</td>
-                        <td><span class="badge badge-dark">Hết hàng</span></td>
-                        <td>
-                            <a href="#" class="btn btn-success btn-sm rounded-0 text-white" type="button" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-edit"></i></a>
-                            <a href="#" class="btn btn-danger btn-sm rounded-0 text-white" type="button" data-toggle="tooltip" data-placement="top" title="Delete"><i class="fa fa-trash"></i></a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <input type="checkbox">
-                        </td>
-                        <td>3</td>
-                        <td><img src="http://via.placeholder.com/80X80" alt=""></td>
-                        <td><a href="#">Apple MacBook Pro Touch 2020 i5 512GB (MWP42SA/A)</a></td>
-                        <td>47.990.000₫</td>
-                        <td>Laptop</td>
-                        <td>26:06:2020 14:00</td>
-                        <td><span class="badge badge-success">Còn hàng</span></td>
-                        <td>
-                            <a href="#" class="btn btn-success btn-sm rounded-0 text-white" type="button" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-edit"></i></a>
-                            <a href="#" class="btn btn-danger btn-sm rounded-0 text-white" type="button" data-toggle="tooltip" data-placement="top" title="Delete"><i class="fa fa-trash"></i></a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <input type="checkbox">
-                        </td>
-                        <td>4</td>
-                        <td><img src="http://via.placeholder.com/80X80" alt=""></td>
-                        <td><a href="#">MacBook Air 2017 128GB (MQD32SA/A)</a></td>
-                        <td>19.990.000₫</td>
-                        <td>Laptop</td>
-                        <td>26:06:2020 14:00</td>
-                        <td><span class="badge badge-success">Còn hàng</span></td>
-                        <td>
-                            <a href="#" class="btn btn-success btn-sm rounded-0 text-white" type="button" data-toggle="tooltip" data-placement="top" title="Edit"><i class="fa fa-edit"></i></a>
-                            <a href="#" class="btn btn-danger btn-sm rounded-0 text-white" type="button" data-toggle="tooltip" data-placement="top" title="Delete"><i class="fa fa-trash"></i></a>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-            <nav aria-label="Page navigation example">
-                <ul class="pagination">
-                    <li class="page-item">
-                        <a class="page-link" href="#" aria-label="Previous">
-                            <span aria-hidden="true">Trước</span>
-                            <span class="sr-only">Sau</span>
-                        </a>
-                    </li>
-                    <li class="page-item"><a class="page-link" href="#">1</a></li>
-                    <li class="page-item"><a class="page-link" href="#">2</a></li>
-                    <li class="page-item"><a class="page-link" href="#">3</a></li>
-                    <li class="page-item">
-                        <a class="page-link" href="#" aria-label="Next">
-                            <span aria-hidden="true">&raquo;</span>
-                            <span class="sr-only">Next</span>
-                        </a>
-                    </li>
-                </ul>
-            </nav>
         </div>
     </div>
-</div>
 @endsection

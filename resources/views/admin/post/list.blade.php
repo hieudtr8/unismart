@@ -65,8 +65,6 @@
                         </thead>
                         <tbody>
                             @if ($posts->total() > 0)
-
-
                                 @php
                                     $stt = 0;
                                 @endphp
